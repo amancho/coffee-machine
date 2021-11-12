@@ -1,0 +1,19 @@
+{
+    "require": {
+        "symfony/console": "^4.2",
+        "phpunit/phpunit": "^9.5",
+        "ext-pdo": "*"
+    },
+    "autoload": {
+        "psr-4": {
+            "Adsmurai\\": "src",
+            "Adsmurai\\Apps\\Console\\": "apps/Console"
+        }
+    },
+    "autoload-dev": {
+        "psr-4": {
+            "Adsmurai\\Tests\\": "tests",
+            "Adsmurai\\Tests\\CoffeeMachine\\": "tests/CoffeeMachine"
+        }
+    }
+}
