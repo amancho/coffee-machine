@@ -2,7 +2,7 @@
 
 namespace Adsmurai\Apps\Console;
 
-use Adsmurai\CoffeeMachine\Orders\Application\Show\MoneyByType;
+use Adsmurai\CoffeeMachine\Orders\Application\Show\GetOrdersHandler;
 use Exception;
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputInterface;
@@ -11,33 +11,38 @@ use Symfony\Component\Console\Output\OutputInterface;
 class ShowOrdersCommand extends Command
 {
     protected static $defaultName = 'app:show-orders';
-    private array $types;
+    private array $orders;
 
     protected function execute(InputInterface $input, OutputInterface $output)
     {
         try {
-            $this->getTypes();
+            $this->getOrders();
             $this->showReport($output);
         } catch (\Exception $ex) {
             $output->writeln($ex->getMessage());
         }
     }
 
-    private function getTypes()
+    private function getOrders()
     {
-        $this->types = (new MoneyByType())->shows();
-        if (empty($this->types)) {
+        $this->orders = (new GetOrdersHandler())->shows();
+        if (empty($this->orders)) {
             throw new Exception('Nothing to show, empty orders');
         }
     }
 
     private function showReport(OutputInterface $output)
     {
-        $output->writeln('Drink      | Money');
-        $output->writeln('-------------------');
+        $output->writeln('Drink      | Price | Sugar | Stick | E.Hot');
+        $output->writeln('------------------------------------------- ');
 
-        foreach($this->types as $type){
-            $output->writeln($this->getType($type['drink_type']) . ' | ' . $this->getMoney($type['money']));
+        foreach($this->orders as $order){
+            $output->writeln($this->getType($order['drink_type'])
+                . ' | ' . $this->getMoney($order['price'])
+                . ' | ' . $order['sugars'] . '    '
+                . ' | ' . $order['stick'] . '    '
+                . ' | ' . $order['extra_hot']
+            );
         }
     }
 
@@ -48,6 +53,6 @@ class ShowOrdersCommand extends Command
 
     private function getMoney(string $money): string
     {
-        return round($money, 2) . '€';
+        return round($money, 2) . '€ ';
     }
 }
