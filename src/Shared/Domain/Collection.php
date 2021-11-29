@@ -11,10 +11,23 @@ abstract class Collection implements Countable, IteratorAggregate
 
     public function __construct(array $items)
     {
+        if (!empty($items)) {
+            foreach ($items as $object) {
+                if (false === is_a($object, $this->type())) {
+                    throw new InvalidCollectionObjectException($object, $this->type());
+                }
+            }
+        }
+
         $this->items = $items;
     }
 
     abstract protected function type(): string;
+
+    public function getCollection(): array
+    {
+        return $this->items;
+    }
 
     public function getIterator(): ArrayIterator
     {
@@ -29,5 +42,10 @@ abstract class Collection implements Countable, IteratorAggregate
     protected function items(): array
     {
         return $this->items;
+    }
+
+    public function add($element): void
+    {
+        $this->items[] = $element;
     }
 }
