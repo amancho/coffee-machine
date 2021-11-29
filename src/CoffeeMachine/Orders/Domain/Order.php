@@ -2,18 +2,17 @@
 
 namespace Adsmurai\CoffeeMachine\Orders\Domain;
 
-use Adsmurai\CoffeeMachine\Drinks\Domain\DrinkPrice;
 use Adsmurai\CoffeeMachine\Drinks\Domain\DrinkType;
 
 final class Order
 {
     private DrinkType $type;
-    private DrinkPrice $price;
+    private OrderPrice $price;
     private OrderSugar $sugar;
     private OrderStick $stick;
     private OrderExtraHot $extraHot;
 
-    public function __construct(DrinkType $type, DrinkPrice $price, OrderSugar $sugar, OrderStick $stick, OrderExtraHot $extraHot
+    public function __construct(DrinkType $type, OrderPrice $price, OrderSugar $sugar, OrderStick $stick, OrderExtraHot $extraHot
     ) {
         $this->type = $type;
         $this->price = $price;
@@ -26,7 +25,7 @@ final class Order
      * Create new order instance
      *
      * @param DrinkType $type
-     * @param DrinkPrice $price
+     * @param OrderPrice $price
      * @param OrderSugar $sugar
      * @param OrderStick $stick
      * @param OrderExtraHot $extraHot
@@ -34,7 +33,7 @@ final class Order
      */
     public static function create(
         DrinkType $type,
-        DrinkPrice $price,
+        OrderPrice $price,
         OrderSugar $sugar,
         OrderStick $stick,
         OrderExtraHot $extraHot
@@ -62,8 +61,19 @@ final class Order
         return $this->extraHot;
     }
 
-    public function price(): DrinkPrice
+    public function price(): OrderPrice
     {
         return $this->price;
+    }
+
+    public function toArray()
+    {
+        return [
+            'drink_type' => $this->type()->value(),
+            'price' => $this->price()->value(),
+            'sugars' => $this->sugar()->value(),
+            'stick' => $this->stick()->value() ?: 0,
+            'extra_hot' => $this->extraHot()->value() ?: 0,
+        ];
     }
 }
