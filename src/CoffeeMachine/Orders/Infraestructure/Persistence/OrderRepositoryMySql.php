@@ -3,15 +3,16 @@
 namespace Adsmurai\CoffeeMachine\Orders\Infraestructure\Persistence;
 
 use Adsmurai\CoffeeMachine\Orders\Domain\Order;
-use Adsmurai\Shared\Infraestructure\Persistence\MySql\MySqlRepository;
+use Adsmurai\CoffeeMachine\Orders\Domain\OrderRepository;
+use PDO;
 
-final class OrderRepositoryMySql
+final class OrderRepositoryMySql implements OrderRepository
 {
-    private $client;
+    private PDO $client;
 
-    public function __construct() {
-
-        $this->client = MySqlRepository::getClient();
+    public function __construct(PDO $client)
+    {
+        $this->client = $client;
     }
 
     public function save(Order $order): void
