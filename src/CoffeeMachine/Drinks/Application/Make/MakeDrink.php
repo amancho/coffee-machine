@@ -3,6 +3,7 @@
 namespace Adsmurai\CoffeeMachine\Drinks\Application\Make;
 
 use Adsmurai\CoffeeMachine\Drinks\Application\Find\FindDrink;
+use Adsmurai\CoffeeMachine\Orders\Application\Create\OrderCreator;
 
 final class MakeDrink
 {
@@ -30,6 +31,8 @@ final class MakeDrink
         $this->checkMoney();
         $this->checkSugar();
         $this->setMessage();
+
+        $this->createOrder();
     }
 
     private function checkType()
@@ -40,6 +43,10 @@ final class MakeDrink
     private function checkSugar()
     {
         (new SugarCheckDrink())->check($this->sugars);
+
+        if ($this->sugars > 0) {
+            $this->stick = true;
+        }
     }
 
     public function checkMoney()
@@ -54,8 +61,7 @@ final class MakeDrink
             $this->message .= ' extra hot';
         }
 
-        if ($this->sugars > 0) {
-            $this->stick = true;
+        if (!empty($this->sugars)) {
             $this->message .= ' with ' . $this->sugars . ' sugars (stick included)';
         }
     }
@@ -70,4 +76,13 @@ final class MakeDrink
         return $this->stick;
     }
 
+    private function createOrder()
+    {
+        (new OrderCreator())->create(
+            $this->type,
+            $this->sugars,
+            $this->stick,
+            $this->extraHot
+        );
+    }
 }

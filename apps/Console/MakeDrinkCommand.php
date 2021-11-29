@@ -3,7 +3,6 @@
 namespace Adsmurai\Apps\Console;
 
 use Adsmurai\CoffeeMachine\Drinks\Application\Make\MakeDrink;
-use Adsmurai\CoffeeMachine\Orders\Application\Create\OrderCreator;
 
 use Symfony\Component\Console\Command\Command;
 use Symfony\Component\Console\Input\InputArgument;
@@ -54,7 +53,6 @@ class MakeDrinkCommand extends Command
         try {
             $this->getParams($input);
             $this->makeDrink();
-            $this->createOrder();
 
             $output->write($this->drinkMaker->message());
             $output->writeln('');
@@ -78,13 +76,4 @@ class MakeDrinkCommand extends Command
         $this->drinkMaker->make();
     }
 
-    private function createOrder()
-    {
-        (new OrderCreator())->create(
-            $this->type,
-            $this->sugars,
-            $this->drinkMaker->stick(),
-            $this->extraHot
-        );
-    }
 }
