@@ -26,6 +26,7 @@ final class Order
      * Create new order instance
      *
      * @param DrinkType $type
+     * @param DrinkPrice $price
      * @param OrderSugar $sugar
      * @param OrderStick $stick
      * @param OrderExtraHot $extraHot
