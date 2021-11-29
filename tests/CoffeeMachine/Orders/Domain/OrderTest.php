@@ -6,6 +6,7 @@ use Adsmurai\CoffeeMachine\Drinks\Domain\DrinkPrice;
 use Adsmurai\CoffeeMachine\Drinks\Domain\DrinkType;
 use Adsmurai\CoffeeMachine\Orders\Domain\Order;
 use Adsmurai\CoffeeMachine\Orders\Domain\OrderExtraHot;
+use Adsmurai\CoffeeMachine\Orders\Domain\OrderPrice;
 use Adsmurai\CoffeeMachine\Orders\Domain\OrderStick;
 use Adsmurai\CoffeeMachine\Orders\Domain\OrderSugar;
 use PHPUnit\Framework\TestCase;
@@ -19,7 +20,7 @@ class OrderTest extends TestCase
 
         $order = Order::create(
             new DrinkType($type),
-            new DrinkPrice($type),
+            new OrderPrice((new DrinkPrice($type))->value()),
             new OrderSugar(1),
             new OrderStick(true),
             new OrderExtraHot(false),

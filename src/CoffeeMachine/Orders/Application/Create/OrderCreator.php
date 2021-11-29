@@ -6,6 +6,7 @@ use Adsmurai\CoffeeMachine\Drinks\Domain\DrinkPrice;
 use Adsmurai\CoffeeMachine\Drinks\Domain\DrinkType;
 use Adsmurai\CoffeeMachine\Orders\Domain\Order;
 use Adsmurai\CoffeeMachine\Orders\Domain\OrderExtraHot;
+use Adsmurai\CoffeeMachine\Orders\Domain\OrderPrice;
 use Adsmurai\CoffeeMachine\Orders\Domain\OrderStick;
 use Adsmurai\CoffeeMachine\Orders\Domain\OrderSugar;
 use Adsmurai\CoffeeMachine\Orders\Infraestructure\Persistence\OrderRepositoryMySql;
@@ -25,9 +26,11 @@ class OrderCreator
 
     public function create(string $type, int $sugar, bool $stick, bool $orderExtraHot): void
     {
+        $drinkPrice = new DrinkPrice($type);
+
         $order = Order::create(
             new DrinkType($type),
-            new DrinkPrice($type),
+            new OrderPrice($drinkPrice->value()),
             new OrderSugar($sugar),
             new OrderStick($stick),
             new OrderExtraHot($orderExtraHot)
